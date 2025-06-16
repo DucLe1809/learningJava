@@ -9,5 +9,9 @@ public class Main {
 
         System.out.println("Host: " + configSingleton.getHost());
         System.out.println("Port: " + configSingleton.getPort());
+
+        DatabaseConfigStatic.loadFromFile("file.txt");
+        System.out.println("Host: " + DatabaseConfigStatic.host);
+        System.out.println("Port: " + DatabaseConfigStatic.port);
     }
 }
