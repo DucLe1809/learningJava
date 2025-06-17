@@ -5,12 +5,14 @@ import java.io.*;
 import java.util.*;
 
 public class WorkerRunnable implements Runnable {
-    protected Socket clientSocket = null;
-    protected String serverText = null;
+    protected Socket clientSocket;
+    protected String serverText;
+    private String clientName;
     private   BufferedReader input;
     private   PrintWriter output;
     private   List<WorkerRunnable> clients;
 
+    // Constructor
     public WorkerRunnable(Socket clientsocket, String serverText, List<WorkerRunnable> clients) {
         this.clientSocket = clientsocket;
         this.serverText = serverText;
@@ -26,10 +28,18 @@ public class WorkerRunnable implements Runnable {
     @Override
     public void run() {
         try {
+            // Adding the name for client
+            clientName = input.readLine();
+            if (clientName == null || clientName.trim().isEmpty()) {
+                clientName = "Ẩn danh";
+            }
+
             clients.add(this); // add self to client list
+            System.out.println(clientName + " connect to the server.");
+
             String msg;
             while ((msg = input.readLine()) != null) {
-                System.out.println("Received: " + msg);
+                System.out.println(clientName + " : " + msg);
                 broadcast(msg);
             }
         } catch (IOException e) {
@@ -45,9 +55,7 @@ public class WorkerRunnable implements Runnable {
     }
     private void broadcast(String message) {
         for (WorkerRunnable client : clients) {
-            if (client != this) {
-                client.output.println(message);
-            }
+                client.output.println(clientName + " : " + message);
         }
     }
 }
