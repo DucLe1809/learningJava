@@ -3,17 +3,15 @@ package servers;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
-import java.util.*;
 
 public class MultiThreadedServer implements Runnable {
-    protected int           serverPort = 9000;
+
+    protected int           serverPort;
     protected ServerSocket  serverSocket = null;
     protected boolean       isStopped = false;
     protected Thread        runningThread = null;
 
-    protected List<WorkerRunnable> clients = Collections.synchronizedList(new ArrayList<>());
-
-
+    // Constructor
     public MultiThreadedServer(int port) {
         this.serverPort = port;
     }
@@ -23,24 +21,20 @@ public class MultiThreadedServer implements Runnable {
             this.runningThread = Thread.currentThread();
         }
         openServerSocket();
-        while (! isStopped)
-        {
-            Socket clientsocket = null;
+        while (! isStopped) {
+            Socket clientsocket;
             try {
                 clientsocket = serverSocket.accept();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 if (isStopped) {
                     System.out.println("Server stopped");
                     return;
                 }
                 throw new RuntimeException("Error accepting client socket", e);
             }
-        new Thread(
-                new WorkerRunnable(
-                        clientsocket, "Multithreaded server", clients)
-        ).start();
+            new Thread(
+                new WorkerRunnable(clientsocket)
+            ).start();
         }
         System.out.println("Server stopped");
     }

@@ -1,4 +1,4 @@
-package servers;
+package Clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +15,7 @@ public class Clients {
         PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
+        // Message received from Server
         Thread receiveThread = new Thread(() -> {
             try {
                 String fromServer;

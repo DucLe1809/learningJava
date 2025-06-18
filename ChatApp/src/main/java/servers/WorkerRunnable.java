@@ -6,17 +6,13 @@ import java.util.*;
 
 public class WorkerRunnable implements Runnable {
     protected Socket clientSocket;
-    protected String serverText;
-    private String clientName;
-    private   BufferedReader input;
+    private   String clientName;
     private   PrintWriter output;
-    private   List<WorkerRunnable> clients;
+    private   BufferedReader input;
 
     // Constructor
-    public WorkerRunnable(Socket clientsocket, String serverText, List<WorkerRunnable> clients) {
+    public WorkerRunnable(Socket clientsocket) {
         this.clientSocket = clientsocket;
-        this.serverText = serverText;
-        this.clients = clients;
         try {
             this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             this.output = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -34,28 +30,22 @@ public class WorkerRunnable implements Runnable {
                 clientName = "Ẩn danh";
             }
 
-            clients.add(this); // add self to client list
             System.out.println(clientName + " connect to the server.");
+            ClientManager.getInstance().addClients(output);
 
             String msg;
             while ((msg = input.readLine()) != null) {
-                System.out.println(clientName + " : " + msg);
-                broadcast(msg);
+                ClientManager.getInstance().broadcast(output, clientName, msg);
             }
         } catch (IOException e) {
             System.out.println("Client disconnected.");
         } finally {
-            clients.remove(this);
+            ClientManager.getInstance().removeClients(output);
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                System.out.println("Error closing socket.");
+                System.out.println("Error closing client socket.");
             }
-        }
-    }
-    private void broadcast(String message) {
-        for (WorkerRunnable client : clients) {
-                client.output.println(clientName + " : " + message);
         }
     }
 }
