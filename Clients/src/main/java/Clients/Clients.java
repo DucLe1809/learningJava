@@ -1,5 +1,6 @@
 package Clients;
 
+import javax.sound.midi.Receiver;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,32 +16,18 @@ public class Clients {
         PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
-        // Message received from Server
-        Thread receiveThread = new Thread(() -> {
-            try {
-                String fromServer;
-                while ((fromServer = input.readLine()) != null) {
-                    System.out.println("[Hệ thống]: " + fromServer);
-                }
-            } catch (IOException e) {
-                System.out.println("Server closed connection");
-            }
-        });
-
-        receiveThread.start();
-
         System.out.print("Enter your name: ");
         String name = console.readLine();
         // Send the name to serverSocket
         output.println(name);
 
-        String fromUser;
-        while ((fromUser = console.readLine()) != null) {
-            if (fromUser.equalsIgnoreCase("/exit")) {
-                break;
-            }
-            output.println(fromUser);
-        }
+        Thread receiver = new Thread(new ClientReceiver(input));
+        Thread sender = new Thread(new ClientSender(console, output));
+
+        receiver.start();
+        sender.start();
+
+
         socket.close();
     }
 }

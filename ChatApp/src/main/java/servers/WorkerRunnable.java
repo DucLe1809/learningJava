@@ -32,9 +32,11 @@ public class WorkerRunnable implements Runnable {
 
             System.out.println(clientName + " connect to the server.");
             ClientManager.getInstance().addClients(output);
+            new ClientInfo(clientName, clientSocket);
 
             String msg;
             while ((msg = input.readLine()) != null) {
+                System.out.println("[" + clientName + "] " + msg );
                 ClientManager.getInstance().broadcast(output, clientName, msg);
             }
         } catch (IOException e) {
