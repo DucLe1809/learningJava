@@ -1,10 +1,10 @@
 package Clients;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.Socket;
+import java.io.*;
 
 public class Clients {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -15,13 +15,14 @@ public class Clients {
         PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
+        ObjectMapper mapper = new ObjectMapper();
+
         Thread receiver = new Thread(new ClientReceiver(input));
         receiver.start();
 
         System.out.print("Enter your name: ");
         String name = console.readLine();
-        // Send the name to serverSocket
-        output.println(name);
+        output.println(mapper.writeValueAsString(new ChatMessage("login", name)));
 
         Thread sender = new Thread(new ClientSender(console, output));
         sender.start();

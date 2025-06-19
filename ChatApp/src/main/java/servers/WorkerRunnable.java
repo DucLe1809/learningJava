@@ -1,5 +1,7 @@
 package servers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.Socket;
 import java.io.*;
 import java.util.*;
@@ -8,6 +10,8 @@ public class WorkerRunnable implements Runnable {
     protected Socket clientSocket;
     private   PrintWriter output;
     private   BufferedReader input;
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     // Constructor
     public WorkerRunnable(Socket clientsocket) {
@@ -24,9 +28,12 @@ public class WorkerRunnable implements Runnable {
     public void run() {
         try {
             // Adding the name for client
-            String clientName = input.readLine();
-            if (clientName == null || clientName.trim().isEmpty()) {
-                clientName = "Ẩn danh";
+            String rawMsg = input.readLine();
+            ChatMessage loginMsg = mapper.readValue(rawMsg, ChatMessage.class);
+
+            String clientName = "Unknown";
+            if ("login".equalsIgnoreCase(loginMsg.cmd)) {
+                clientName = loginMsg.content;
             }
 
             System.out.println(clientName + " connect to the server.");
@@ -34,13 +41,21 @@ public class WorkerRunnable implements Runnable {
 
             new ClientInfo(clientName, clientSocket.getInetAddress().getHostAddress());
 
-            String msg;
-            while ((msg = input.readLine()) != null) {
-                System.out.println("[" + clientName + "] " + msg );
-                ClientManager.getInstance().broadcast(output, clientName, msg);
+            String jsonMsg;
+            while ((jsonMsg = input.readLine()) != null) {
+                ChatMessage msg = mapper.readValue(jsonMsg, ChatMessage.class);
+                switch (msg.cmd) {
+                    case "chat":
+                        System.out.println("[" + clientName + "] " + msg.content);
+                        ClientManager.getInstance().broadcast(output, clientName, msg.content);
+                        break;
+                    case "exit":
+                        return;
+                }
             }
+
         } catch (IOException e) {
-            System.out.println("Client disconnected.");
+            e.printStackTrace();
         } finally {
             ClientManager.getInstance().removeClients(output);
             System.out.println("Clients disconnected.");
