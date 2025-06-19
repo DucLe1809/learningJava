@@ -8,9 +8,9 @@ public class ClientInfo {
     private final String name;
     private final String ipAddress;
 
-    public ClientInfo(String name, Socket socket) {
+    public ClientInfo(String name, String ipAddress) {
         this.name = name;
-        this.ipAddress = socket.getInetAddress().getHostAddress();
+        this.ipAddress = ipAddress;
     }
 
     // Getter function

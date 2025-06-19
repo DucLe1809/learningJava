@@ -2,6 +2,7 @@ package Clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.io.PrintWriter;
 public class ClientSender implements Runnable {
     private final BufferedReader console;
@@ -17,6 +18,7 @@ public class ClientSender implements Runnable {
             String message;
             while ((message = console.readLine()) != null) {
                 if (message.equalsIgnoreCase("/exit")) {
+                    System.out.println("Thoát...");
                     break;
                 }
                 output.println(message);

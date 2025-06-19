@@ -6,7 +6,6 @@ import java.util.*;
 
 public class WorkerRunnable implements Runnable {
     protected Socket clientSocket;
-    private   String clientName;
     private   PrintWriter output;
     private   BufferedReader input;
 
@@ -25,14 +24,15 @@ public class WorkerRunnable implements Runnable {
     public void run() {
         try {
             // Adding the name for client
-            clientName = input.readLine();
+            String clientName = input.readLine();
             if (clientName == null || clientName.trim().isEmpty()) {
                 clientName = "Ẩn danh";
             }
 
             System.out.println(clientName + " connect to the server.");
             ClientManager.getInstance().addClients(output);
-            new ClientInfo(clientName, clientSocket);
+
+            new ClientInfo(clientName, clientSocket.getInetAddress().getHostAddress());
 
             String msg;
             while ((msg = input.readLine()) != null) {
@@ -43,6 +43,7 @@ public class WorkerRunnable implements Runnable {
             System.out.println("Client disconnected.");
         } finally {
             ClientManager.getInstance().removeClients(output);
+            System.out.println("Clients disconnected.");
             try {
                 clientSocket.close();
             } catch (IOException e) {

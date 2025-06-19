@@ -2,7 +2,6 @@ package Clients;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class ClientReceiver implements Runnable {
     private final BufferedReader input;
@@ -11,6 +10,7 @@ public class ClientReceiver implements Runnable {
     public ClientReceiver(BufferedReader input) {
         this.input = input;
     }
+
     public void run() {
         try {
             String fromServer;
@@ -18,7 +18,7 @@ public class ClientReceiver implements Runnable {
                 System.out.println("[Hệ thống]: " + fromServer);
             }
         } catch (IOException e) {
-            System.out.println("Server closed connection");
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
