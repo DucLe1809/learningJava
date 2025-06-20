@@ -26,14 +26,14 @@ public class ClientManager {
         }
     }
 
-    public void broadcast(PrintWriter sender, String senderName, String message) {
+    public void broadcast(PrintWriter sender, String senderName, String jsonMsg) {
         synchronized (clientOutputs) {
             if (!clientOutputs.contains(sender)) {
                 System.out.println("Unknow client " + senderName);
             }
 
             for (PrintWriter client : clientOutputs) {
-                client.println(senderName + " : " + message);
+                client.println(jsonMsg);
             }
         }
     }

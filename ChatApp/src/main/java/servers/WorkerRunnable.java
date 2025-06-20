@@ -47,7 +47,10 @@ public class WorkerRunnable implements Runnable {
                 switch (msg.cmd) {
                     case "chat":
                         System.out.println("[" + clientName + "] " + msg.content);
-                        ClientManager.getInstance().broadcast(output, clientName, msg.content);
+
+                        ChatMessage outMsg = new ChatMessage("chat", clientName + " : " + msg.content);
+                        String  outMsgJson = mapper.writeValueAsString(outMsg);
+                        ClientManager.getInstance().broadcast(output, clientName, outMsgJson);
                         break;
                     case "exit":
                         return;
