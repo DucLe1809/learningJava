@@ -8,14 +8,16 @@ import java.util.*;
 
 public class WorkerRunnable implements Runnable {
     protected Socket clientSocket;
+    private MultiThreadedServer server;
     private   PrintWriter output;
     private   BufferedReader input;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     // Constructor
-    public WorkerRunnable(Socket clientsocket) {
+    public WorkerRunnable(Socket clientsocket, MultiThreadedServer server) {
         this.clientSocket = clientsocket;
+        this.server = server;
         try {
             this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             this.output = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -53,6 +55,7 @@ public class WorkerRunnable implements Runnable {
                         ClientManager.getInstance().broadcast(output, clientName, outMsgJson);
                         break;
                     case "exit":
+                        server.removeClientsSocket(this);
                         return;
                 }
             }

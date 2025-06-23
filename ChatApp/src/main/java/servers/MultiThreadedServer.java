@@ -3,6 +3,8 @@ package servers;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiThreadedServer implements Runnable {
 
@@ -10,6 +12,8 @@ public class MultiThreadedServer implements Runnable {
     protected ServerSocket  serverSocket = null;
     protected boolean       isStopped = false;
     protected Thread        runningThread = null;
+    private final List<Thread> clientThreads = new ArrayList<>();
+    private final List<WorkerRunnable> workerRunnables = new ArrayList<>();
 
     // Constructor
     public MultiThreadedServer(int port) {
@@ -32,9 +36,16 @@ public class MultiThreadedServer implements Runnable {
                 }
                 throw new RuntimeException("Error accepting client socket", e);
             }
-            new Thread(
-                new WorkerRunnable(clientsocket)
-            ).start();
+
+            WorkerRunnable worker = new WorkerRunnable(clientsocket, this);
+            Thread clientThread = new Thread(
+                worker
+            );
+
+            addThread(clientThread);
+            addWorker(worker);
+
+            clientThread.start();
         }
         System.out.println("Server stopped");
     }
@@ -51,12 +62,35 @@ public class MultiThreadedServer implements Runnable {
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
+    private void addThread(Thread thread) {
+        synchronized (this) {
+            this.clientThreads.add(thread);
+        }
+
+    }
+
+    private void addWorker(WorkerRunnable worker) {
+        synchronized (this) {
+            this.workerRunnables.add(worker);
+        }
+
+    }
 
     private void openServerSocket() {
         try  {
             this.serverSocket = new ServerSocket(this.serverPort);
         } catch (IOException e) {
             throw new RuntimeException("Error opening server socket", e);
+        }
+    }
+
+    public void removeClientsSocket(WorkerRunnable worker) {
+        synchronized (this) {
+            int index = workerRunnables.indexOf(worker);
+            if (index >= 0) {
+                workerRunnables.remove(index);
+                clientThreads.remove(index);
+            }
         }
     }
 }
