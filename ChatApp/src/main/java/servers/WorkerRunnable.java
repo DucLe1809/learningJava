@@ -8,7 +8,7 @@ import java.util.*;
 
 public class WorkerRunnable implements Runnable {
     protected Socket clientSocket;
-    private MultiThreadedServer server;
+    private final MultiThreadedServer server;
     private   PrintWriter output;
     private   BufferedReader input;
 
@@ -55,7 +55,6 @@ public class WorkerRunnable implements Runnable {
                         ClientManager.getInstance().broadcast(output, clientName, outMsgJson);
                         break;
                     case "exit":
-                        server.removeClientsSocket(this);
                         return;
                 }
             }
@@ -63,6 +62,7 @@ public class WorkerRunnable implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            server.removeClientsSocket(this);
             ClientManager.getInstance().removeClients(output);
             System.out.println("Clients disconnected.");
             try {
