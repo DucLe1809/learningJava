@@ -1,13 +1,22 @@
 package org.learningspringwithduc.videoapi.controllers;
 
-import org.springframework.stereotype.Controller;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.learningspringwithduc.videoapi.entities.VideoEntities;
+import org.learningspringwithduc.videoapi.repositories.VideoRepositories;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
+@AllArgsConstructor
 public class VideoController {
-    @RequestMapping("/")
-    public String index() {
+    private final VideoRepositories  videoRepositories;
 
-        return "index.html";
+    @GetMapping("/videos")
+    public List<VideoEntities> getAllVideos(){
+        return videoRepositories.findAll();
     }
 }
