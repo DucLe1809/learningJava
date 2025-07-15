@@ -65,5 +65,14 @@ public class VideoController {
     }
 
     // DELETE
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable(name = "id") Long id){
+        var video = videoService.getVideoById(id).orElse(null);
+        if (video == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        videoService.deleteVideoById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
