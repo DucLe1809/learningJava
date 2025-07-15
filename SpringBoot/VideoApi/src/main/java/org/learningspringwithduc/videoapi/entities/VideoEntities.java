@@ -19,7 +19,9 @@ import java.time.LocalDateTime;
 public class VideoEntities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
     private String title;
 
     private String description;

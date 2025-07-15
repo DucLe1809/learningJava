@@ -35,10 +35,6 @@ public class VideoService {
                 existingVideo -> {
                     existingVideo.setTitle(updatedVideo.getTitle());
                     existingVideo.setDescription(updatedVideo.getDescription());
-                    existingVideo.setDuration(updatedVideo.getDuration());
-                    existingVideo.setCreatedAt(updatedVideo.getCreatedAt());
-                    existingVideo.setUpdatedAt(updatedVideo.getUpdatedAt());
-                    existingVideo.setTag(updatedVideo.getTag());
                     return videoRepositories.save(existingVideo);
                 }).orElseThrow(() -> new RuntimeException("Video not found"));
     }
