@@ -1,10 +1,12 @@
 package org.learningspringwithduc.videoapi.controllers;
 
 import lombok.AllArgsConstructor;
+import org.learningspringwithduc.videoapi.dtos.RegisterVideoRequest;
 import org.learningspringwithduc.videoapi.dtos.VideoDto;
 import org.learningspringwithduc.videoapi.mappers.VideoMapper;
 import org.learningspringwithduc.videoapi.repositories.VideoService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +37,12 @@ public class VideoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create
+    @PostMapping
+    public ResponseEntity<VideoDto> createVideo(@RequestBody RegisterVideoRequest request){
+        var video = videoMapper.toEntity(request);
+        videoService.createVideo(video);
+
+        var videoDto = videoMapper.toDto(video);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(videoDto);
+    }
 }

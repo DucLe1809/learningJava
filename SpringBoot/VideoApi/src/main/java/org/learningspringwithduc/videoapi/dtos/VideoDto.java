@@ -8,6 +8,6 @@ import lombok.Getter;
 
 public class VideoDto {
     private Long id;
-    private String titles;
+    private String title;
     private String description;
 }
