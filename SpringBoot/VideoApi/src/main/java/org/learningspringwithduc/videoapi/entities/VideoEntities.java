@@ -22,19 +22,27 @@ public class VideoEntities {
     @Column(name = "id")
     private long id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "duration")
     private int duration;
 
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "tag")
     private String tag;
 }
