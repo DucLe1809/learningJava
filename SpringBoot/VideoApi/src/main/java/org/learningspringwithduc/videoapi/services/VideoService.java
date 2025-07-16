@@ -1,4 +1,4 @@
-package org.learningspringwithduc.videoapi.repositories;
+package org.learningspringwithduc.videoapi.services;
 
 import org.learningspringwithduc.videoapi.entities.VideoEntities;
 import org.learningspringwithduc.videoapi.repositories.VideoRepositories;

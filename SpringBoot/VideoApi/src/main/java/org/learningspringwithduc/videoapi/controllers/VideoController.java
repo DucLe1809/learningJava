@@ -5,7 +5,7 @@ import org.learningspringwithduc.videoapi.dtos.RegisterVideoRequest;
 import org.learningspringwithduc.videoapi.dtos.UpdateVideoRequest;
 import org.learningspringwithduc.videoapi.dtos.VideoDto;
 import org.learningspringwithduc.videoapi.mappers.VideoMapper;
-import org.learningspringwithduc.videoapi.repositories.VideoService;
+import org.learningspringwithduc.videoapi.services.VideoService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
