@@ -30,6 +30,7 @@ public class VideoService {
     public void deleteVideoById(Long id) {
         videoRepositories.deleteById(id);
     }
+
     public VideoEntities updateVideo(Long id, VideoEntities updatedVideo) {
         return videoRepositories.findById(id).map(
                 existingVideo -> {

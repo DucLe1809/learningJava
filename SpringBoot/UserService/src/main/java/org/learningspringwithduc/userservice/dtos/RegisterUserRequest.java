@@ -1,12 +1,12 @@
 package org.learningspringwithduc.userservice.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
-public class UserDto {
+import lombok.Data;
+
+@Data
+public class RegisterUserRequest {
     private String username;
     private String email;
+    private String password;
     private String number;
 }
