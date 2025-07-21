@@ -17,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     private final LoginService loginService;
 
+    // Login
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         String token = loginService.login(request.getUsername(), request.getPassword());
         return ResponseEntity.ok(new LoginResponse(token));
     }
+
+    // Sign Up
+    @PostMapping("/signUp")
+    public ResponseEntity<LoginResponse> signUp(@RequestBody LoginRequest request) {}
 
 }

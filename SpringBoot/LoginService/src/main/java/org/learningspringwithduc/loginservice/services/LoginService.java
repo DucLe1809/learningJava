@@ -2,6 +2,7 @@ package org.learningspringwithduc.loginservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.loginservice.dtos.LoginRequest;
+import org.learningspringwithduc.loginservice.utils.JwtUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class LoginService {
 
     private final RestTemplate restTemplate;
+    private final JwtUtils jwtUtils;
 
     public String login(String username, String password) {
         String url = "http://localhost:8081/users/get-by-username/" + username;
@@ -19,7 +21,7 @@ public class LoginService {
             throw new RuntimeException("Invalid username or password");
         }
 
-        return "mock-jwt" + username;
+        return jwtUtils.createToken(username);
     }
 
 }
