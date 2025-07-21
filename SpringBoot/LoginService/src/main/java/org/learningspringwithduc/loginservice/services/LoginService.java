@@ -2,8 +2,11 @@ package org.learningspringwithduc.loginservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.loginservice.dtos.LoginRequest;
+import org.learningspringwithduc.loginservice.dtos.SignUpRequest;
+import org.learningspringwithduc.loginservice.dtos.SignUpResponse;
 import org.learningspringwithduc.loginservice.utils.JwtUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -22,6 +25,19 @@ public class LoginService {
         }
 
         return jwtUtils.createToken(username);
+    }
+
+    public String signUp(SignUpRequest request) {
+        String url = "http://localhost:8081/users/sign-up-user";
+
+        try {
+            SignUpResponse response = restTemplate.postForObject(url, request, SignUpResponse.class);
+            return "A new user is successfully created";
+        } catch (HttpClientErrorException.Conflict e) {
+            return "Email already used";
+        } catch (HttpClientErrorException ex) {
+            return "Error" + ex.getMessage();
+        }
     }
 
 }

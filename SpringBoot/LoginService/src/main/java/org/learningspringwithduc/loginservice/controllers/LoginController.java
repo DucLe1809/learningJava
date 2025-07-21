@@ -3,12 +3,16 @@ package org.learningspringwithduc.loginservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.loginservice.dtos.LoginRequest;
 import org.learningspringwithduc.loginservice.dtos.LoginResponse;
+import org.learningspringwithduc.loginservice.dtos.SignUpRequest;
+import org.learningspringwithduc.loginservice.dtos.SignUpResponse;
 import org.learningspringwithduc.loginservice.services.LoginService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 
 @RestController
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class LoginController {
     private final LoginService loginService;
+    private final RestTemplate restTemplate;
 
     // Login
     @PostMapping("/login")
@@ -26,6 +31,9 @@ public class LoginController {
 
     // Sign Up
     @PostMapping("/signUp")
-    public ResponseEntity<LoginResponse> signUp(@RequestBody LoginRequest request) {}
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
+        String response = loginService.signUp(request);
+        return ResponseEntity.status(HttpStatus.OK).body(new SignUpResponse(response));
+    }
 
 }
