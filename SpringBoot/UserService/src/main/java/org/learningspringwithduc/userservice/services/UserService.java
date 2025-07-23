@@ -28,6 +28,12 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+        String newUserEmail = user.getEmail();
+
+        // A user is existed with the email
+        if (userRepositories.findByEmail(newUserEmail).isPresent()) {
+            return null;
+        }
         return userRepositories.save(user);
     }
 

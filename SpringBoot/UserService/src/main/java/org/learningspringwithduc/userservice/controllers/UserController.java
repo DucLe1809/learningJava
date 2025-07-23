@@ -5,13 +5,16 @@ import org.learningspringwithduc.userservice.dtos.LoginUserRequest;
 import org.learningspringwithduc.userservice.dtos.UserDto;
 import org.learningspringwithduc.userservice.dtos.RegisterUserRequest;
 import org.learningspringwithduc.userservice.dtos.UpdateUserRequest;
+import org.learningspringwithduc.userservice.entities.User;
 import org.learningspringwithduc.userservice.mappers.UserMapper;
+import org.learningspringwithduc.userservice.repositories.UserRepositories;
 import org.learningspringwithduc.userservice.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -19,6 +22,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final UserRepositories userRepositories;
 
     // READ ALL USER
     @GetMapping
@@ -47,19 +51,33 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // VERIFY USER FOR LOG IN
+    @PostMapping("/verify-user")
+    public ResponseEntity<Boolean> verifyUser(@RequestBody LoginUserRequest request) {
+        Optional<User> requestUser = userRepositories.findByUsername(request.getUsername());
+        if (requestUser.isPresent() && requestUser.get().getPassword().equals(request.getPassword())) {
+            return ResponseEntity.ok(true);
+        }
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+    }
+
     // CREATE USER
-    @PostMapping
-    public ResponseEntity<UserDto> createVideo(@RequestBody RegisterUserRequest request){
-        var newUser = userMapper.registerToUser(request);
-        userService.saveUser(newUser);
+    @PostMapping("/sign-up-user")
+    public ResponseEntity<?> createUser(@RequestBody RegisterUserRequest request){
+        User newUser = userMapper.registerToUser(request);
+
+        User signedUpUser = userService.saveUser(newUser);
+        if (signedUpUser == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email has already been used!");
+        }
 
         var userDto = userMapper.entityToDto(newUser);
         return  ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     // UPDATE USER
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateVideo(
+    @PutMapping("/update-user-data/{id}")
+    public ResponseEntity<UserDto> updateUser(
             @PathVariable Long id, @RequestBody UpdateUserRequest request){
         var user = userService.getUserById(id).orElse(null);
 
