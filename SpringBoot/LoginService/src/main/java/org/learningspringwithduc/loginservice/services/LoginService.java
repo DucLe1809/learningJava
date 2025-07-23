@@ -16,22 +16,27 @@ public class LoginService {
     private final RestTemplate restTemplate;
     private final JwtUtils jwtUtils;
 
-    public String login(String username, String password) {
-        String url = "http://localhost:8081/users/get-by-username/" + username;
+    public String login(LoginRequest request) {
+        String url = "http://localhost:8081/users/verify-user";
 
-        LoginRequest user = restTemplate.getForObject(url, LoginRequest.class);
-        if (user == null || !user.getPassword().equals(password)) {
-            throw new RuntimeException("Invalid username or password");
+        try {
+            Boolean isValid = restTemplate.postForObject(url, request, Boolean.class);
+            if (Boolean.TRUE.equals(isValid)) {
+                return jwtUtils.createToken(request.getUsername());
+            }
+            else {
+                return "Invalid username or password";
+            }
+        } catch (HttpClientErrorException e) {
+            return "Error: " + e.getMessage();
         }
-
-        return jwtUtils.createToken(username);
     }
 
     public String signUp(SignUpRequest request) {
         String url = "http://localhost:8081/users/sign-up-user";
 
         try {
-            SignUpResponse response = restTemplate.postForObject(url, request, SignUpResponse.class);
+            restTemplate.postForObject(url, request, SignUpResponse.class);
             return "A new user is successfully created";
         } catch (HttpClientErrorException.Conflict e) {
             return "Email already used";
