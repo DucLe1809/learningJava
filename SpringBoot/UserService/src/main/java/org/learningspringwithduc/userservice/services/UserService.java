@@ -35,6 +35,14 @@ public class UserService {
          return userRepositories.findByUsername(username);
     }
 
+    public Boolean isWhiteList(Long userId) {
+        Optional<User> user = userRepositories.findById(userId);
+        if (user.get().isWhiteListed()) {
+            return true;
+        }
+        return false;
+    }
+
     public UserDto signUpUser(RegisterUserRequest request) {
         String newUserEmail = request.getEmail();
 

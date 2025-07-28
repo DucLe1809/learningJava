@@ -47,6 +47,15 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/is-white-list")
+    public ResponseEntity<Boolean> userIsWhiteList(@PathVariable Long id) {
+        Boolean isWhiteList = userService.isWhiteList(id);
+        if (isWhiteList) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
+    }
+
     // VERIFY USER FOR LOG IN
     @PostMapping("/verify-user")
     public ResponseEntity<?> verifyUser(@RequestBody LoginRequestDto request) {

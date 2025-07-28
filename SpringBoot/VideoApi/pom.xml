@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.learningspringwithduc</groupId>
-    <artifactId>DefaultVideo</artifactId>
+    <artifactId>VideoService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>VideoApi</name>
     <description>VideoApi</description>
