@@ -1,4 +1,4 @@
-package org.learningspringwithduc.videoapi.dtos;
+package org.learningspringwithduc.videoservice.dtos;
 
 
 import lombok.Data;

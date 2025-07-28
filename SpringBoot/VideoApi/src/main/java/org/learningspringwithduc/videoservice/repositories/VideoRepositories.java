@@ -1,6 +1,6 @@
-package org.learningspringwithduc.videoapi.repositories;
+package org.learningspringwithduc.videoservice.repositories;
 
-import org.learningspringwithduc.videoapi.entities.VideoEntities;
+import org.learningspringwithduc.videoservice.entities.VideoEntities;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

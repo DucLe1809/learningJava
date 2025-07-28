@@ -1,7 +1,7 @@
-package org.learningspringwithduc.videoapi.services;
+package org.learningspringwithduc.videoservice.services;
 
-import org.learningspringwithduc.videoapi.entities.VideoEntities;
-import org.learningspringwithduc.videoapi.repositories.VideoRepositories;
+import org.learningspringwithduc.videoservice.entities.VideoEntities;
+import org.learningspringwithduc.videoservice.repositories.VideoRepositories;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

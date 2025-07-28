@@ -1,11 +1,11 @@
-package org.learningspringwithduc.videoapi.controllers;
+package org.learningspringwithduc.videoservice.controllers;
 
 import lombok.AllArgsConstructor;
-import org.learningspringwithduc.videoapi.dtos.RegisterVideoRequest;
-import org.learningspringwithduc.videoapi.dtos.UpdateVideoRequest;
-import org.learningspringwithduc.videoapi.dtos.VideoDto;
-import org.learningspringwithduc.videoapi.mappers.VideoMapper;
-import org.learningspringwithduc.videoapi.services.VideoService;
+import org.learningspringwithduc.videoservice.dtos.RegisterVideoRequest;
+import org.learningspringwithduc.videoservice.dtos.UpdateVideoRequest;
+import org.learningspringwithduc.videoservice.dtos.VideoDto;
+import org.learningspringwithduc.videoservice.mappers.VideoMapper;
+import org.learningspringwithduc.videoservice.services.VideoService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

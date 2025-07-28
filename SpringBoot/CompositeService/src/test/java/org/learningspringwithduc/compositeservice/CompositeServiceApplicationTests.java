@@ -1,10 +1,10 @@
-package org.learningspringwithduc.videoapi;
+package org.learningspringwithduc.compositeservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class VideoApiApplicationTests {
+class CompositeServiceApplicationTests {
 
     @Test
     void contextLoads() {

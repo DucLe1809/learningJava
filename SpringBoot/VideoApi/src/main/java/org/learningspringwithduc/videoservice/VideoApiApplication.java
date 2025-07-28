@@ -1,4 +1,4 @@
-package org.learningspringwithduc.videoapi;
+package org.learningspringwithduc.videoservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

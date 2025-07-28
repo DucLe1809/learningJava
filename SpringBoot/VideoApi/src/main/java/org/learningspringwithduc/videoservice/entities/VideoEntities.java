@@ -1,4 +1,4 @@
-package org.learningspringwithduc.videoapi.entities;
+package org.learningspringwithduc.videoservice.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
