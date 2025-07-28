@@ -1,11 +1,8 @@
 package org.learningspringwithduc.userservice.controllers;
 
 import lombok.AllArgsConstructor;
-import org.learningspringwithduc.userservice.dtos.LoginUserRequest;
-import org.learningspringwithduc.userservice.dtos.UserDto;
-import org.learningspringwithduc.userservice.dtos.RegisterUserRequest;
-import org.learningspringwithduc.userservice.dtos.UpdateUserRequest;
-import org.learningspringwithduc.userservice.entities.User;
+
+import org.learningspringwithduc.userservice.dtos.*;
 import org.learningspringwithduc.userservice.mappers.UserMapper;
 import org.learningspringwithduc.userservice.repositories.UserRepositories;
 import org.learningspringwithduc.userservice.services.UserService;
@@ -14,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -44,7 +40,7 @@ public class UserController {
 
     // READ USER BY USERNAME
     @GetMapping("/get-by-username/{username}")
-    public ResponseEntity<LoginUserRequest> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<LoginRequestDto> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username)
                 .map(userMapper::entityToLoginUserRequest)
                 .map(ResponseEntity::ok)
@@ -53,26 +49,24 @@ public class UserController {
 
     // VERIFY USER FOR LOG IN
     @PostMapping("/verify-user")
-    public ResponseEntity<Boolean> verifyUser(@RequestBody LoginUserRequest request) {
-        Optional<User> requestUser = userRepositories.findByUsername(request.getUsername());
-        if (requestUser.isPresent() && requestUser.get().getPassword().equals(request.getPassword())) {
-            return ResponseEntity.ok(true);
+    public ResponseEntity<?> verifyUser(@RequestBody LoginRequestDto request) {
+        try {
+            LoginResponseDto validUser = userService.logIn(request);
+            return ResponseEntity.ok(validUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
 
-    // CREATE USER
+    // CREATE USER FOR SIGN UP
     @PostMapping("/sign-up-user")
     public ResponseEntity<?> createUser(@RequestBody RegisterUserRequest request){
-        User newUser = userMapper.registerToUser(request);
-
-        User signedUpUser = userService.saveUser(newUser);
-        if (signedUpUser == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email has already been used!");
+        try {
+            UserDto newUser = userService.signUpUser(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-
-        var userDto = userMapper.entityToDto(newUser);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     // UPDATE USER
@@ -86,7 +80,7 @@ public class UserController {
         }
 
         userMapper.update(request, user);
-        userService.saveUser(user);
+        userRepositories.save(user);
 
         return ResponseEntity.ok(userMapper.entityToDto(user));
     }

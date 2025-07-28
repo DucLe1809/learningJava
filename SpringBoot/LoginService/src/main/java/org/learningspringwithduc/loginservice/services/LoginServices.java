@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class LoginServices {
 
     private final RestTemplate restTemplate;
     private final JwtUtils jwtUtils;
