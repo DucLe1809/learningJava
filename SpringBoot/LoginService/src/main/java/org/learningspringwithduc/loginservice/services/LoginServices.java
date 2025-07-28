@@ -25,7 +25,7 @@ public class LoginServices {
             String token = jwtUtils.createToken(validUser);
             return token;
         } catch (HttpClientErrorException e) {
-            return "Error: " + e.getMessage();
+            throw new RuntimeException("Invalid username or password");
         }
     }
 

@@ -65,6 +65,9 @@ public class UserController {
             UserDto newUser = userService.signUpUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
         } catch (RuntimeException e) {
+            if (e.getMessage().equals("Email already exists")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }

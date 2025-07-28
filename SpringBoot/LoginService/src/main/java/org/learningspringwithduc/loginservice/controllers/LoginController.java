@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -23,19 +25,32 @@ public class LoginController {
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
-        String token = loginServices.logIn(request);
-        return ResponseEntity.ok(new TokenResponse(token));
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            String token = loginServices.logIn(request);
+            return ResponseEntity.ok(new TokenResponse(token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.
+                    status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("Error: ", e.getMessage()));
+        }
+
     }
 
     // Sign Up
     @PostMapping("/signUp")
-    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest request) {
         try {
             SignUpResponse createdUser = loginServices.signUp(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+            if (e.getMessage().contains("Email already exists")) {
+                return ResponseEntity.
+                        status(HttpStatus.CONFLICT)
+                        .body(Map.of("Error: ", e.getMessage()));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("Error: ", e.getMessage()));
         }
     }
 

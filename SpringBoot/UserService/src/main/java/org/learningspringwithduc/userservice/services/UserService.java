@@ -57,8 +57,9 @@ public class UserService {
     public LoginResponseDto logIn(LoginRequestDto request) {
         Optional<User> user = userRepositories.findByUsername(request.getUsername());
 
-        System.out.println(user.get());
-
+        if (!user.isPresent()) {
+            throw new RuntimeException();
+        }
         User userEntity = user.get();
         if (!passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
             throw new RuntimeException();
