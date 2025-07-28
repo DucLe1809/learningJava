@@ -3,6 +3,7 @@ package org.learningspringwithduc.loginservice.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.learningspringwithduc.loginservice.dtos.LoginResponse;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,9 +20,10 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(jwtSecreteKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String username) {
+    public String createToken(LoginResponse loginResponse) {
         return Jwts.builder()
-                .subject(username)
+                .subject(loginResponse.getId().toString())
+                .claim("username", loginResponse.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000*60))
                 .signWith(generateSecreteKey())

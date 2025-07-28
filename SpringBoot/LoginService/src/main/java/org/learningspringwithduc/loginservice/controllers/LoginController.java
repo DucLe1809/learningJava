@@ -2,11 +2,12 @@ package org.learningspringwithduc.loginservice.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.loginservice.dtos.LoginRequest;
-import org.learningspringwithduc.loginservice.dtos.LoginResponse;
+import org.learningspringwithduc.loginservice.dtos.TokenResponse;
 import org.learningspringwithduc.loginservice.dtos.SignUpRequest;
 import org.learningspringwithduc.loginservice.dtos.SignUpResponse;
-import org.learningspringwithduc.loginservice.services.LoginService;
+import org.learningspringwithduc.loginservice.services.LoginServices;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,20 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class LoginController {
-    private final LoginService loginService;
+    private final LoginServices loginServices;
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        String token = loginService.login(request);
-        return ResponseEntity.ok(new LoginResponse(token));
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
+        String token = loginServices.logIn(request);
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 
     // Sign Up
     @PostMapping("/signUp")
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
-        String response = loginService.signUp(request);
-        return ResponseEntity.ok(new SignUpResponse(response));
+        try {
+            SignUpResponse createdUser = loginServices.signUp(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

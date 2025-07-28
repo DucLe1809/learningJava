@@ -2,6 +2,7 @@ package org.learningspringwithduc.loginservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.loginservice.dtos.LoginRequest;
+import org.learningspringwithduc.loginservice.dtos.LoginResponse;
 import org.learningspringwithduc.loginservice.dtos.SignUpRequest;
 import org.learningspringwithduc.loginservice.dtos.SignUpResponse;
 import org.learningspringwithduc.loginservice.utils.JwtUtils;
@@ -16,32 +17,27 @@ public class LoginServices {
     private final RestTemplate restTemplate;
     private final JwtUtils jwtUtils;
 
-    public String login(LoginRequest request) {
+    public String logIn(LoginRequest request) {
         String url = "http://localhost:8081/users/verify-user";
 
         try {
-            Boolean isValid = restTemplate.postForObject(url, request, Boolean.class);
-            if (Boolean.TRUE.equals(isValid)) {
-                return jwtUtils.createToken(request.getUsername());
-            }
-            else {
-                return "Invalid username or password";
-            }
+            LoginResponse validUser = restTemplate.postForObject(url, request, LoginResponse.class);
+            String token = jwtUtils.createToken(validUser);
+            return token;
         } catch (HttpClientErrorException e) {
             return "Error: " + e.getMessage();
         }
     }
 
-    public String signUp(SignUpRequest request) {
+    public SignUpResponse signUp(SignUpRequest request) {
         String url = "http://localhost:8081/users/sign-up-user";
 
         try {
-            restTemplate.postForObject(url, request, SignUpResponse.class);
-            return "A new user is successfully created";
+            return restTemplate.postForObject(url, request, SignUpResponse.class);
         } catch (HttpClientErrorException.Conflict e) {
-            return "Email already used";
+            throw new RuntimeException("Email already exists");
         } catch (HttpClientErrorException ex) {
-            return "Error" + ex.getMessage();
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
