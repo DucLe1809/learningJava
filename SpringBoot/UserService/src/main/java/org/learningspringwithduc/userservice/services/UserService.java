@@ -37,10 +37,7 @@ public class UserService {
 
     public Boolean isWhiteList(Long userId) {
         Optional<User> user = userRepositories.findById(userId);
-        if (user.get().isWhiteListed()) {
-            return true;
-        }
-        return false;
+        return user.get().isWhiteListed();
     }
 
     public UserDto signUpUser(RegisterUserRequest request) {
@@ -65,7 +62,7 @@ public class UserService {
     public LoginResponseDto logIn(LoginRequestDto request) {
         Optional<User> user = userRepositories.findByUsername(request.getUsername());
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new RuntimeException();
         }
         User userEntity = user.get();
@@ -79,7 +76,7 @@ public class UserService {
         userRepositories.deleteById(id);
     }
 
-//    public User updateUser(Long id, User newInfo) {
+//  public User updateUser(Long id, User newInfo) {
 //        return userRepositories.findById(id).map(
 //                existingUser -> {
 //                    existingUser.setUsername(newInfo.getEmail());

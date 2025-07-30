@@ -31,7 +31,7 @@ public class User {
     @Column(name = "number")
     private String number;
 
-    @Column(name =  "is_whitelisted")
+    @Column(name = "is_whitelisted")
     private boolean isWhiteListed;
 
 }

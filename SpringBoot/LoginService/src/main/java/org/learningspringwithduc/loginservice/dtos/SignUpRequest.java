@@ -8,4 +8,5 @@ public class SignUpRequest {
     private String email;
     private String password;
     private String number;
+    private Boolean isWhiteListed;
 }

@@ -1,6 +1,5 @@
 package org.learningspringwithduc.loginservice.utils;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.learningspringwithduc.loginservice.dtos.LoginResponse;
@@ -28,21 +27,6 @@ public class JwtUtils {
                 .expiration(new Date(System.currentTimeMillis() + 1000*60))
                 .signWith(generateSecreteKey())
                 .compact();
-    }
-
-    public String generateUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(generateSecreteKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.getSubject();
-    }
-
-    public boolean isTokenValid(String token, String username) {
-        String extractedUsername = generateUsernameFromToken(token);
-        return username.equals(extractedUsername);
     }
 
 }

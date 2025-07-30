@@ -9,4 +9,5 @@ public class RegisterUserRequest {
     private String email;
     private String password;
     private String number;
+    private Boolean isWhiteListed;
 }

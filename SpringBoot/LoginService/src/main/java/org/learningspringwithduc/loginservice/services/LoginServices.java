@@ -22,8 +22,8 @@ public class LoginServices {
 
         try {
             LoginResponse validUser = restTemplate.postForObject(url, request, LoginResponse.class);
-            String token = jwtUtils.createToken(validUser);
-            return token;
+            assert validUser != null;
+            return jwtUtils.createToken(validUser);
         } catch (HttpClientErrorException e) {
             throw new RuntimeException("Invalid username or password");
         }

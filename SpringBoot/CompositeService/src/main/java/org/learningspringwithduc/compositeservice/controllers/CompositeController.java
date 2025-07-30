@@ -14,9 +14,10 @@ import java.util.List;
 public class CompositeController {
     private final CompositeService compositeService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<VideoDto>> getListVideoIds(@PathVariable Long id) {
-        List<VideoDto> listIds = compositeService.getVideos(id);
+    @GetMapping("/get-list-video")
+    public ResponseEntity<List<VideoDto>> getListVideoIds(
+            @RequestHeader(value = "X-User-Id", required = false) String userIdStr) {
+        List<VideoDto> listIds = compositeService.getVideos(Long.parseLong(userIdStr));
         return ResponseEntity.ok(listIds);
     }
 }
