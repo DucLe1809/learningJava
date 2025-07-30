@@ -28,7 +28,7 @@ public class RecommendedController {
        Random random = new Random(id);
 
        Collections.shuffle(recommendedVideos, random);
-       
+
        // Extract id of videos
        List<Long> recommendedIds = recommendedVideos.stream()
                .limit(5)
