@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.learningspringwithduc.videoservice.dtos.RegisterVideoRequest;
 import org.learningspringwithduc.videoservice.dtos.UpdateVideoRequest;
 import org.learningspringwithduc.videoservice.dtos.VideoDto;
+import org.learningspringwithduc.videoservice.entities.VideoEntities;
 import org.learningspringwithduc.videoservice.mappers.VideoMapper;
 import org.learningspringwithduc.videoservice.services.VideoService;
 
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -20,22 +22,24 @@ public class VideoController {
     private final VideoService videoService;
     private final VideoMapper videoMapper;
 
-    // READ ALL VIDEO
+    // GET ALL VIDEO
     @GetMapping
-    public List<VideoDto> getAllVideos(){
-        return videoService.getAllVideos()
+    public ResponseEntity<List<VideoDto>> getAllVideos() {
+        List<VideoDto> videoIds = videoService.getAllVideos()
                 .stream()
                 .map(videoMapper::toDto)
                 .toList();
+        return ResponseEntity.ok(videoIds);
     }
 
-    // READ BY ID
+    // GET VIDEO BY ID
     @GetMapping("/{id}")
     public ResponseEntity<VideoDto> getVideoById(@PathVariable Long id){
-        return videoService.getVideoById(id)
-                .map(videoMapper::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<VideoEntities> video = videoService.getVideoById(id);
+        if (!video.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(video.map(videoMapper::toDto).get());
     }
 
     // CREATE
