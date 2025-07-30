@@ -15,8 +15,7 @@ public class RecommendedService {
 
     // Stimulate the returning of recommended video
     public List<RecommendedEntities> getAllVideoIds() {
-        List<Long> listOfIds = Arrays.asList(1L, 3L, 4L);
 
-        return recommendedRepositories.findByIdIn(listOfIds);
+        return recommendedRepositories.findAll();
     }
 }
