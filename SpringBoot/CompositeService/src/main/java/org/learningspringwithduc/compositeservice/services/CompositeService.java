@@ -24,7 +24,7 @@ public class CompositeService {
         return restTemplate.getForObject(url, Boolean.class);
     }
 
-    public List<VideoDto> getRecommendedVideoIds(Long userId) {
+    public List getRecommendedVideoIds(Long userId) {
         String recommendedUrl = "https://localhost:8085/recommended/" + userId;
         return restTemplate.getForObject(recommendedUrl, List.class);
     }
