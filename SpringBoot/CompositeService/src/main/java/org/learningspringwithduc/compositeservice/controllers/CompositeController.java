@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.learningspringwithduc.compositeservice.dtos.VideoDto;
 import org.learningspringwithduc.compositeservice.services.CompositeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +15,8 @@ public class CompositeController {
     private final CompositeService compositeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<VideoDto>> getListVideoIds(@RequestParam Long userId) {
-        List<VideoDto> listIds = compositeService.getVideos(userId);
+    public ResponseEntity<List<VideoDto>> getListVideoIds(@PathVariable Long id) {
+        List<VideoDto> listIds = compositeService.getVideos(id);
         return ResponseEntity.ok(listIds);
     }
 }

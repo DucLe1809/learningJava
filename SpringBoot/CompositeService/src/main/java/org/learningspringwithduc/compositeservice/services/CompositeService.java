@@ -14,9 +14,9 @@ public class CompositeService {
 
     public List<VideoDto> getVideos(Long userId) {
         if (inWhiteList(userId)) {
-            return getRecommededVideoIds(userId);
+            return getRecommendedVideoIds(userId);
         }
-        return getDefaultVideoIds(userId);
+        return getDefaultVideoIds();
     }
 
     public Boolean inWhiteList(Long userId) {
@@ -24,13 +24,13 @@ public class CompositeService {
         return restTemplate.getForObject(url, Boolean.class);
     }
 
-    public List<VideoDto> getRecommededVideoIds(Long userId) {
+    public List<VideoDto> getRecommendedVideoIds(Long userId) {
         String recommendedUrl = "https://localhost:8085/recommended/" + userId;
         return restTemplate.getForObject(recommendedUrl, List.class);
     }
 
-    public List<VideoDto> getDefaultVideoIds(Long userId) {
-        String defaultUrl = "https://localhost:8084/videos/" + userId;
+    public List<VideoDto> getDefaultVideoIds() {
+        String defaultUrl = "https://localhost:8084/videos/";
         return restTemplate.getForObject(defaultUrl, List.class);
     }
 }
