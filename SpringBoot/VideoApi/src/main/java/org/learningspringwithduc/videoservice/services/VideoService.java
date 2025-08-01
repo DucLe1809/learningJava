@@ -1,6 +1,5 @@
 package org.learningspringwithduc.videoservice.services;
 
-import org.learningspringwithduc.videoservice.dtos.VideoDto;
 import org.learningspringwithduc.videoservice.entities.VideoEntities;
 import org.learningspringwithduc.videoservice.repositories.VideoRepositories;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,8 @@ public class VideoService {
         return videoRepositories.findById(id);
     }
 
-    public VideoEntities createVideo(VideoEntities video) {
-        return videoRepositories.save(video);
+    public void createVideo(VideoEntities video) {
+        videoRepositories.save(video);
     }
 
     public void deleteVideoById(Long id) {
@@ -33,16 +32,15 @@ public class VideoService {
     }
 
     public List<VideoEntities> getAllVideosById(List<Long> ids) {
-        List<VideoEntities> listVideos = videoRepositories.findAllById(ids);
-        return listVideos;
+        return videoRepositories.findAllById(ids);
     }
 
-    public VideoEntities updateVideo(Long id, VideoEntities updatedVideo) {
-        return videoRepositories.findById(id).map(
-                existingVideo -> {
-                    existingVideo.setTitle(updatedVideo.getTitle());
-                    existingVideo.setDescription(updatedVideo.getDescription());
-                    return videoRepositories.save(existingVideo);
-                }).orElseThrow(() -> new RuntimeException("Video not found"));
-    }
+//    public VideoEntities updateVideo(Long id, VideoEntities updatedVideo) {
+//        return videoRepositories.findById(id).map(
+//                existingVideo -> {
+//                    existingVideo.setTitle(updatedVideo.getTitle());
+//                    existingVideo.setDescription(updatedVideo.getDescription());
+//                    return videoRepositories.save(existingVideo);
+//                }).orElseThrow(() -> new RuntimeException("Video not found"));
+//    }
 }

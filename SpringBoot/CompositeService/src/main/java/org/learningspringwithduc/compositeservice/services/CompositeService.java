@@ -60,7 +60,7 @@ public class CompositeService {
 
     // Get list of video ids in VideoService
     public List<Long> getDefaultVideoIds() {
-        String defaultUrl = "http://localhost:8084/videos/";
+        String defaultUrl = "http://localhost:8084/videos";
         return restTemplate.exchange(defaultUrl,
                 HttpMethod.GET,
                 null,

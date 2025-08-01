@@ -25,23 +25,24 @@ public class VideoController {
 
     // GET ALL VIDEO
     @GetMapping
-    public ResponseEntity<List<VideoDto>> getAllVideos() {
-        List<VideoDto> videoIds = videoService.getAllVideos()
+    public ResponseEntity<List<Long>> getAllVideoIds() {
+        List<Long> allVideoIds = videoService.getAllVideos()
                 .stream()
-                .map(videoMapper::toDto)
-                .toList();
-        return ResponseEntity.ok(videoIds);
+                .map(VideoEntities::getId)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(allVideoIds);
     }
 
     // GET VIDEO BY ID
     @GetMapping("/{id}")
     public ResponseEntity<VideoDto> getVideoById(@PathVariable Long id){
         Optional<VideoEntities> video = videoService.getVideoById(id);
-        if (!video.isPresent()) {
+        if (video.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(video.map(videoMapper::toDto).get());
     }
+
 
     // GET MULTIPLE VIDEOS BY LIST OF ID
     @PostMapping("/get-list-videos")

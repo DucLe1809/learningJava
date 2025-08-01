@@ -14,12 +14,18 @@ import java.util.List;
 public class CompositeController {
     private final CompositeService compositeService;
 
-    @GetMapping("/get-list-id/{userIdStr}")
+    @GetMapping("/get-list-id")
     public ResponseEntity<List<VideoDto>> getListVideoIds(
-            @PathVariable String userIdStr) {
-        List<Long> listIds = compositeService.getListIds(Long.parseLong(userIdStr));
-        List<VideoDto> listVideos = compositeService.getAllVideoByIds(listIds);
+            @RequestHeader("X-User-Id") String userIdStr) {
+        System.out.println("Received Id: " +  userIdStr);
 
-        return ResponseEntity.ok(listVideos);
+        List<Long> listIds;
+        if (userIdStr == null || userIdStr.isEmpty()) {
+            listIds = compositeService.getDefaultVideoIds();
+        }
+        else {
+            listIds = compositeService.getListIds(Long.parseLong(userIdStr));
+        }
+        return ResponseEntity.ok(compositeService.getAllVideoByIds(listIds));
     }
 }
