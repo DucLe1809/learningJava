@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -40,6 +41,15 @@ public class VideoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(video.map(videoMapper::toDto).get());
+    }
+
+    // GET MULTIPLE VIDEOS BY LIST OF ID
+    @PostMapping("/get-list-videos")
+    public ResponseEntity<List<VideoDto>> getAllVideosList(@RequestBody List<Long> ids) {
+        List<VideoDto> videoDtoList = videoService.getAllVideosById(ids).stream()
+                                    .map(videoMapper::toDto)
+                                    .collect(Collectors.toList());
+        return ResponseEntity.ok(videoDtoList);
     }
 
     // CREATE

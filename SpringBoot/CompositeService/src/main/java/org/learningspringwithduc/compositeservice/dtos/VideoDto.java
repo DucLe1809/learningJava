@@ -1,8 +1,13 @@
 package org.learningspringwithduc.compositeservice.dtos;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@AllArgsConstructor
+@Getter
+
 public class VideoDto {
-    private Long id;
+    private String title;
+    private String description;
+    private int duration;
 }

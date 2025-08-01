@@ -1,5 +1,6 @@
 package org.learningspringwithduc.videoservice.services;
 
+import org.learningspringwithduc.videoservice.dtos.VideoDto;
 import org.learningspringwithduc.videoservice.entities.VideoEntities;
 import org.learningspringwithduc.videoservice.repositories.VideoRepositories;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,11 @@ public class VideoService {
 
     public void deleteVideoById(Long id) {
         videoRepositories.deleteById(id);
+    }
+
+    public List<VideoEntities> getAllVideosById(List<Long> ids) {
+        List<VideoEntities> listVideos = videoRepositories.findAllById(ids);
+        return listVideos;
     }
 
     public VideoEntities updateVideo(Long id, VideoEntities updatedVideo) {

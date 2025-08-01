@@ -14,10 +14,12 @@ import java.util.List;
 public class CompositeController {
     private final CompositeService compositeService;
 
-    @GetMapping("/get-list-video")
+    @GetMapping("/get-list-id/{userIdStr}")
     public ResponseEntity<List<VideoDto>> getListVideoIds(
-            @RequestHeader(value = "X-User-Id", required = false) String userIdStr) {
-        List<VideoDto> listIds = compositeService.getVideos(Long.parseLong(userIdStr));
-        return ResponseEntity.ok(listIds);
+            @PathVariable String userIdStr) {
+        List<Long> listIds = compositeService.getListIds(Long.parseLong(userIdStr));
+        List<VideoDto> listVideos = compositeService.getAllVideoByIds(listIds);
+
+        return ResponseEntity.ok(listVideos);
     }
 }
