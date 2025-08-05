@@ -14,7 +14,7 @@ import java.util.List;
 public class CompositeController {
     private final CompositeService compositeService;
 
-    @GetMapping("/get-list-id")
+    @GetMapping("/get-list-videos")
     public ResponseEntity<List<VideoDto>> getListVideoIds(
             @RequestHeader("X-User-Id") String userIdStr) {
         System.out.println("Received Id: " +  userIdStr);

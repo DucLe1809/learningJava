@@ -65,7 +65,7 @@ public class CompositeService {
 
     // Get list of video ids in RecommendService
     public List<Long> getRecommendedVideoIds(Long userId) {
-        String recommendedUrl = recommendUri + userId;
+        String recommendedUrl = recommendUri + userId + "?limit=1&offset=0";
         return restTemplate.exchange(recommendedUrl,
                 HttpMethod.GET,
                 null,

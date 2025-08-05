@@ -5,7 +5,6 @@ import org.learningspringwithduc.recommendedvideo.entities.RecommendedEntities;
 import org.learningspringwithduc.recommendedvideo.repositories.RecommendedRepositories;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service

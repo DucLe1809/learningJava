@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.learningspringwithduc.recommendedvideo.entities.RecommendedEntities;
 import org.learningspringwithduc.recommendedvideo.services.RecommendedService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,16 +19,20 @@ public class RecommendedController {
 
     // Mock list of recommended ids
     @GetMapping("/{id}")
-    public ResponseEntity<List<Long>> getRecommendedVideoIds(@PathVariable Long id) {
-       List<RecommendedEntities> recommendedVideos = recommendedService.getAllVideoIds();
+    public ResponseEntity<List<Long>> getRecommendedVideoIds(
+            @RequestParam int limit,
+            @RequestParam int offset,
+            @PathVariable Long id) {
+       List<RecommendedEntities> allVideos = recommendedService.getAllVideoIds();
 
        Random random = new Random(id);
 
-       Collections.shuffle(recommendedVideos, random);
+       Collections.shuffle(allVideos, random);
 
        // Extract id of videos
-       List<Long> recommendedIds = recommendedVideos.stream()
-               .limit(5)
+       List<Long> recommendedIds = allVideos.stream()
+               .skip(offset)
+               .limit(limit)
                .map(RecommendedEntities::getId)
                .collect(Collectors.toList());
 
