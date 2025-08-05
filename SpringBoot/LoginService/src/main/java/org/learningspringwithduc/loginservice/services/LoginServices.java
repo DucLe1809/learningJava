@@ -6,6 +6,7 @@ import org.learningspringwithduc.loginservice.dtos.LoginResponse;
 import org.learningspringwithduc.loginservice.dtos.SignUpRequest;
 import org.learningspringwithduc.loginservice.dtos.SignUpResponse;
 import org.learningspringwithduc.loginservice.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +18,11 @@ public class LoginServices {
     private final RestTemplate restTemplate;
     private final JwtUtils jwtUtils;
 
+    @Value("${users.uri}")
+    private String userUri;
+
     public String logIn(LoginRequest request) {
-        String url = "http://localhost:8081/users/verify-user";
+        String url = userUri + "verify-user";
 
         try {
             LoginResponse validUser = restTemplate.postForObject(url, request, LoginResponse.class);
@@ -30,7 +34,7 @@ public class LoginServices {
     }
 
     public SignUpResponse signUp(SignUpRequest request) {
-        String url = "http://localhost:8081/users/sign-up-user";
+        String url = userUri + "sign-up-user";
 
         try {
             return restTemplate.postForObject(url, request, SignUpResponse.class);

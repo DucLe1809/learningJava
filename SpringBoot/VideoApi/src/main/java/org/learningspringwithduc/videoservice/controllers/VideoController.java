@@ -23,7 +23,7 @@ public class VideoController {
     private final VideoService videoService;
     private final VideoMapper videoMapper;
 
-    // GET ALL VIDEO
+    // GET ALL VIDEOS ID
     @GetMapping
     public ResponseEntity<List<Long>> getAllVideoIds() {
         List<Long> allVideoIds = videoService.getAllVideos()
